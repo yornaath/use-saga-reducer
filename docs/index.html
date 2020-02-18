@@ -1,0 +1,360 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>use-reducer-saga</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">use-reducer-saga</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>use-reducer-saga</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#use-saga-reducer" id="use-saga-reducer" style="color: inherit; text-decoration: none;">
+					<h1>use-saga-reducer</h1>
+				</a>
+				<p>Use redux-saga with react reducer hook, with convenience methods for running sagas from components.</p>
+				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+					<h3>Example</h3>
+				</a>
+				<a href="#simplecomponenttsx" id="simplecomponenttsx" style="color: inherit; text-decoration: none;">
+					<h4>SimpleComponent.tsx</h4>
+				</a>
+				<pre><code class="language-typescript">import React from 'react'
+import { useSaga } from 'use-saga-reducer'
+import { useAsync } from 'react-use'
+import { take, select } from 'redux-saga/effects'
+import { reducer, saga, ping, State, ActionEvent } from './store'
+
+const initialState: State = {
+  events: []
+}
+
+const takePings = (until: number) =&gt; function* () {
+  while(yield take('ping')) {
+
+    const events = (yield select((s) =&gt; s.events)) as ActionEvent[]
+    const nrOfPings = events.filter(e =&gt; e === 'ping').length    
+
+    if(nrOfPings === until) 
+      return "counting done"
+  }
+}
+
+export default () =&gt; {
+
+  const [state, dispatch, run] = useSaga(
+    reducer, 
+    initialState, 
+    saga
+  )
+
+  const counted = useAsync(async () =&gt; {
+    return await run(takePings(3))
+  })
+
+  return (
+    &lt;&gt;
+
+      &lt;div style={{marginBottom: 10}}&gt;
+        &lt;button onClick={() =&gt; dispatch(ping())}&gt;Ping&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{marginBottom: 10}}&gt;
+        {state.events.map((event, index) =&gt; (
+          &lt;i key={index}&gt;
+            {event} {' '}
+          &lt;/i&gt;
+        ))}
+      &lt;/div&gt;
+
+      {
+        state.error &amp;&amp;
+          &lt;b style={{color: 'orange'}}&gt;{ state.error }&lt;/b&gt;
+      }
+
+
+      &lt;div style={{marginTop: 10}}&gt;
+        {
+          counted.loading ?
+            &lt;b style={{color: 'orange'}}&gt;counting..&lt;/b&gt; :
+          counted.value ?
+            &lt;b style={{color: 'green'}}&gt;{ counted.value }&lt;/b&gt; :
+          "" 
+        }
+      &lt;/div&gt;
+
+
+    &lt;/&gt;
+  )
+}</code></pre>
+				<a href="#globalsagareducertsx" id="globalsagareducertsx" style="color: inherit; text-decoration: none;">
+					<h4>GlobalSagaReducer.tsx</h4>
+				</a>
+				<pre><code class="language-typescript">import React from 'react'
+import { useSaga } from 'use-saga-reducer'
+import { reducer, saga, ping, State } from './store'
+
+const initialState: State = {
+  events: []
+}
+
+const sagaContext = createSagaContext(reducer, initialState, saga)
+
+export default () =&gt; {
+  return (
+    &lt;sagaContext.Provider&gt;
+
+      &lt;Inner /&gt;
+      &lt;Inner /&gt;
+      &lt;Inner /&gt;
+
+    &lt;/sagaContext.Provider&gt;
+  )
+}
+
+export const Inner = () =&gt; {
+
+  const [state, dispatch, run] = sagaContext.use()
+
+  return (
+    &lt;&gt;
+
+      &lt;div style={{marginBottom: 10}}&gt;
+        &lt;button onClick={() =&gt; dispatch(ping())}&gt;Ping&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;div style={{marginBottom: 10}}&gt;
+        {state.events.map((event, index) =&gt; (
+          &lt;i key={index}&gt;
+            {event} {' '}
+          &lt;/i&gt;
+        ))}
+      &lt;/div&gt;
+
+      {
+        state.error &amp;&amp;
+          &lt;b style={{color: 'orange'}}&gt;{ state.error }&lt;/b&gt;
+      }
+
+    &lt;/&gt;
+  )
+}</code></pre>
+				<a href="#storets" id="storets" style="color: inherit; text-decoration: none;">
+					<h4>store.ts</h4>
+				</a>
+				<pre><code class="language-typescript">
+<span class="hljs-keyword">import</span> { take, put, delay, select, SelectEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">'redux-saga/effects'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> Ping = <span class="hljs-string">'ping'</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> Pong = <span class="hljs-string">'pong'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> PingActionType = {
+  <span class="hljs-keyword">type</span>: Ping
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> ping = (): <span class="hljs-function"><span class="hljs-params">PingActionType</span> =&gt;</span> ({
+  <span class="hljs-keyword">type</span>: <span class="hljs-string">'ping'</span>
+})
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> PongActionType = {
+  <span class="hljs-keyword">type</span>: Pong
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> pong = (): <span class="hljs-function"><span class="hljs-params">PongActionType</span> =&gt;</span> ({
+  <span class="hljs-keyword">type</span>: <span class="hljs-string">'pong'</span>
+})
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> ActionType = 
+    PingActionType
+  | PongActionType
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> ActionEvent =
+    Ping
+  | Pong
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> State = {
+  events: ActionEvent[]
+  error?: <span class="hljs-built_in">string</span>
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> reducer = (state: State, action: ActionType): <span class="hljs-function"><span class="hljs-params">State</span> =&gt;</span> {
+  <span class="hljs-keyword">switch</span>(action.type) {
+
+    <span class="hljs-keyword">case</span> <span class="hljs-string">'ping'</span>:
+      <span class="hljs-keyword">const</span> isWaitingForPong = state.events[state.events.length - <span class="hljs-number">1</span>] === <span class="hljs-string">'ping'</span>
+
+      <span class="hljs-keyword">if</span>(isWaitingForPong)
+        <span class="hljs-keyword">return</span> { ...state, error: <span class="hljs-string">'Invariant: trying to ping while ponging!'</span>}
+
+      <span class="hljs-keyword">return</span> {
+        events: [...state.events, <span class="hljs-string">'ping'</span>]
+      }
+
+    <span class="hljs-keyword">case</span> <span class="hljs-string">'pong'</span>:
+      <span class="hljs-keyword">const</span> isWaitingForPing = state.events[state.events.length - <span class="hljs-number">1</span>] === <span class="hljs-string">'pong'</span>
+
+      <span class="hljs-keyword">if</span>(isWaitingForPing)
+        <span class="hljs-keyword">return</span> { ...state, error: <span class="hljs-string">'Invariant: trying to pong while pinging!'</span>}
+
+      <span class="hljs-keyword">return</span> {
+        events: [...state.events, <span class="hljs-string">'pong'</span>]
+      }
+
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> saga = <span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">saga</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">while</span>(<span class="hljs-keyword">yield</span> take(<span class="hljs-string">'ping'</span>)) {
+    <span class="hljs-keyword">yield</span> delay(<span class="hljs-number">800</span>)
+    <span class="hljs-keyword">yield</span> put(pong())
+  }
+}</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_createsagacontext_.html">&quot;create<wbr>Saga<wbr>Context&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_usesaga_.html">&quot;use<wbr>Saga&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
