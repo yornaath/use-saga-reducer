@@ -3,6 +3,13 @@
 
 Use redux-saga with react reducer hook, with convenience methods for running sagas from components.
 
+## API
+
+```
+useSaga<S, A>(reducer: (state: S, action: A) => S, initialState: S, saga: Saga, options?: Omit<RunSagaOptions<A, S>, "channel" | "dispatch" | "getState">): SagaStore<S, A>
+createSagaContext<S, A>(reducer: (state: S, action: A) => S, initialState: S, saga: () => Iterator<StrictEffect, any>, options?: Omit<RunSagaOptions<A, S>, "channel" | "dispatch" | "getState">): { Provider: FunctionComponent<{}>; use: use }
+```
+
 ### Example
 
 #### SimpleComponent.tsx
