@@ -1,10 +1,11 @@
 import React from 'react';
+import { EventEmitter } from 'events';
 import { Dispatch } from 'react';
 import { RunSagaOptions, Saga } from 'redux-saga';
 export declare type RunSaga = <RT>(saga: () => Generator<any, RT>) => Promise<RT>;
 export declare type SagaStore<S, A> = [S, Dispatch<A>, RunSaga];
 export declare type SagaOptions<S, A> = Omit<RunSagaOptions<A, S>, 'channel' | 'dispatch' | 'getState' | 'onError'>;
-export declare const createSagaIO: <S, A>(dispatch: React.Dispatch<A>, stateRef: React.MutableRefObject<S>, options?: Pick<RunSagaOptions<A, S>, "sagaMonitor" | "context" | "effectMiddlewares"> | undefined) => {
+export declare const createSagaIO: <S, A>(stateRef: React.MutableRefObject<S>, emitter: EventEmitter, options?: Pick<RunSagaOptions<A, S>, "sagaMonitor" | "context" | "effectMiddlewares"> | undefined) => {
     sagaMonitor?: import("redux-saga").SagaMonitor | undefined;
     context?: object | undefined;
     effectMiddlewares?: import("redux-saga").EffectMiddleware[] | undefined;

@@ -51,12 +51,12 @@ var events_1 = require("events");
 var scheduler_1 = require("scheduler");
 var react_1 = require("react");
 var redux_saga_1 = require("redux-saga");
-exports.createSagaIO = function (dispatch, stateRef, options) {
+exports.createSagaIO = function (stateRef, emitter, options) {
     var channel = redux_saga_1.stdChannel();
     var sagaOptions = options || {};
     var io = __assign({ channel: channel,
         dispatch: function (action) {
-            dispatch(action);
+            emitter.emit('output', action);
         },
         getState: function () {
             return stateRef.current;
@@ -70,18 +70,25 @@ exports.useSaga = function (reducer, initialState, saga, options) {
     var ioRef = react_1.useRef();
     var getIO = function () {
         if (!ioRef.current)
-            ioRef.current = exports.createSagaIO(reactDispatch, stateRef, options);
+            ioRef.current = exports.createSagaIO(stateRef, emitter.current, options);
         return ioRef.current;
     };
     stateRef.current = reactState;
     react_1.useEffect(function () {
         var task = redux_saga_1.runSaga(getIO(), saga);
         var cancel = function () {
-            return task.cancel();
+            emitter.current.removeAllListeners();
+            task.cancel();
         };
-        emitter.current.on('action', function (action) {
+        emitter.current.on('input', function (action) {
             scheduler_1.unstable_scheduleCallback(scheduler_1.unstable_ImmediatePriority, function () {
                 getIO().channel.put(action);
+            });
+        });
+        emitter.current.on('output', function (action) {
+            scheduler_1.unstable_scheduleCallback(scheduler_1.unstable_ImmediatePriority, function () {
+                getIO().channel.put(action);
+                reactDispatch(action);
             });
         });
         return cancel;
@@ -89,7 +96,7 @@ exports.useSaga = function (reducer, initialState, saga, options) {
     var enhancedDispatch = function (action) {
         reactDispatch(action);
         scheduler_1.unstable_scheduleCallback(scheduler_1.unstable_ImmediatePriority, function () {
-            emitter.current.emit("action", action);
+            emitter.current.emit("input", action);
         });
         return action;
     };
