@@ -1,6 +1,8 @@
 
 # use-saga-reducer
 
+Use redux-saga with react reducer hook, with convenience methods for running sagas from components.
+
 ### Example
 
 #### store.ts
@@ -71,10 +73,6 @@ export const saga = function* saga() {
     yield delay(800)
     yield put(pong())
   }
-}
-
-export const selectState = <T> (selector: (s:State) => T): SelectEffect => {
-  return select(selector)
 }
 ```
 
