@@ -1,6 +1,6 @@
 {
   "name": "use-reducer-saga",
-  "version": "0.0.5",
+  "version": "0.0.51",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yklykl530/koa-sse.git"
+    "url": "git+https://github.com/gorillatron/use-saga-reducer.git"
   },
   "prepublish": "tsc",
   "devDependencies": {
