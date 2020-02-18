@@ -28,8 +28,8 @@ export default () => {
   )
 
   const counted = useAsync(async () => {
-    return await run(takePings(3))
-  })
+    return await run(takePings(4))
+  }, [])
 
   return (
     <>
