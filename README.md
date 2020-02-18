@@ -175,7 +175,7 @@ export default () => {
 
 export const Inner = () => {
 
-  const [state, dispatch] = sagaContext.use()
+  const [state, dispatch, run] = sagaContext.use()
 
   return (
     <>
