@@ -2,7 +2,7 @@ import React, { MutableRefObject } from 'react'
 import { EventEmitter } from 'events'
 import { unstable_ImmediatePriority, unstable_scheduleCallback } from 'scheduler'
 import { Dispatch, useReducer, useRef, useEffect } from 'react'
-import { runSaga, stdChannel, RunSagaOptions, Saga } from 'redux-saga'
+import { runSaga, stdChannel, RunSagaOptions, Saga, channel } from 'redux-saga'
 import {  } from '@redux-saga/types'
 
 export type RunSaga = <RT> (saga: () => Generator<any, RT>) => Promise<RT>
@@ -11,14 +11,18 @@ export type SagaStore<S, A> = [S, Dispatch<A>, RunSaga]
 
 export type SagaOptions<S, A> = Omit<RunSagaOptions<A, S>, 'channel' | 'dispatch' | 'getState' | 'onError'>
 
-export const createSagaIO = <S, A> (dispatch: Dispatch<A>, stateRef: MutableRefObject<S>, options?: SagaOptions<S, A>,) => {
+export const createSagaIO = <S, A> (
+  stateRef: MutableRefObject<S>, 
+  emitter: EventEmitter, 
+  options?: SagaOptions<S, A>
+) => {
   const channel = stdChannel<A>()
   const sagaOptions = options || {}
 
   const io = {
     channel,
     dispatch(action: A) {
-      dispatch(action)
+      emitter.emit('output', action)
     },
     getState() {
       return stateRef.current
@@ -46,7 +50,7 @@ export const useSaga = <S, A> (
 
   const getIO = () => {
     if(!ioRef.current)
-      ioRef.current = createSagaIO(reactDispatch, stateRef, options)
+      ioRef.current = createSagaIO(stateRef, emitter.current, options)
     return ioRef.current
   }
   
@@ -56,15 +60,23 @@ export const useSaga = <S, A> (
     
     const task = runSaga(getIO(), saga)
 
-    const cancel = () => 
+    const cancel = () => {
+      emitter.current.removeAllListeners()
       task.cancel()
+    }
 
-    emitter.current.on('action', 
-      (action: A) => {
-        unstable_scheduleCallback(unstable_ImmediatePriority, () => {
-          getIO().channel.put(action)
-        })
+    emitter.current.on('input', (action: A) => {
+      unstable_scheduleCallback(unstable_ImmediatePriority, () => {
+        getIO().channel.put(action)
       })
+    })
+
+    emitter.current.on('output', (action: A) => {
+      unstable_scheduleCallback(unstable_ImmediatePriority, () => {
+        getIO().channel.put(action)
+        reactDispatch(action)
+      })
+    })
 
     return cancel
   }, [])
@@ -72,7 +84,7 @@ export const useSaga = <S, A> (
   const enhancedDispatch: Dispatch<A> = (action) => {
     reactDispatch(action)
     unstable_scheduleCallback(unstable_ImmediatePriority, () => {
-      emitter.current.emit("action", action)
+      emitter.current.emit("input", action)
     })
     return action
   }
