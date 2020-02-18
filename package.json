@@ -1,6 +1,6 @@
 {
   "name": "use-reducer-saga",
-  "version": "0.0.57",
+  "version": "0.0.58",
   "description": "Use redux-saga with react reducer hook, with convenience methods for running sagas from components.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
