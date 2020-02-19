@@ -3,8 +3,8 @@ import { EventEmitter } from 'events';
 import { Dispatch } from 'react';
 import { AsyncState } from 'react-use/esm/useAsync';
 import { RunSagaOptions, Saga } from 'redux-saga';
-export declare type RunSaga = <Returns>(saga: () => Generator<any, Returns>, deps?: any[]) => AsyncState<Returns>;
-export declare type SagaStore<State, Action> = [State, Dispatch<Action>, RunSaga];
+export declare type UseRun = <Returns>(saga: () => Generator<any, Returns>, deps?: any[]) => AsyncState<Returns>;
+export declare type SagaStore<State, Action> = [State, Dispatch<Action>, UseRun];
 export declare type SagaOptions<State, Action> = Omit<RunSagaOptions<Action, State>, 'channel' | 'dispatch' | 'getState' | 'onError'>;
 export declare const createSagaIO: <State, Action>(stateRef: React.MutableRefObject<State>, emitter: EventEmitter, options?: Pick<RunSagaOptions<Action, State>, "sagaMonitor" | "context" | "effectMiddlewares"> | undefined) => {
     sagaMonitor?: import("redux-saga").SagaMonitor | undefined;

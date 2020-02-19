@@ -5,9 +5,9 @@ import { Dispatch, useReducer, useRef, useEffect } from 'react'
 import useAsync, { AsyncState } from 'react-use/esm/useAsync'
 import { runSaga, stdChannel, RunSagaOptions, Saga, channel } from 'redux-saga'
 
-export type RunSaga = <Returns> (saga: () => Generator<any, Returns>, deps?: any[]) => AsyncState<Returns>
+export type UseRun = <Returns> (saga: () => Generator<any, Returns>, deps?: any[]) => AsyncState<Returns>
 
-export type SagaStore<State, Action> = [State, Dispatch<Action>, RunSaga]
+export type SagaStore<State, Action> = [State, Dispatch<Action>, UseRun]
 
 export type SagaOptions<State, Action> = Omit<RunSagaOptions<Action, State>, 'channel' | 'dispatch' | 'getState' | 'onError'>
 
@@ -89,7 +89,7 @@ export const useSaga = <State, Action> (
     return action
   }
 
-  const run: RunSaga = (saga, deps = []) => {
+  const useRun: UseRun = (saga, deps = []) => {
 
     let canceled = false
     let resolve: (value?: any) => void
@@ -118,5 +118,5 @@ export const useSaga = <State, Action> (
     return useAsync(() => promise, deps)
   }
 
-  return [reactState, enhancedDispatch, run]
+  return [reactState, enhancedDispatch, useRun]
 }

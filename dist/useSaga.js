@@ -68,7 +68,7 @@ exports.useSaga = function (reducer, initialState, saga, options) {
         });
         return action;
     };
-    var run = function (saga, deps) {
+    var useRun = function (saga, deps) {
         if (deps === void 0) { deps = []; }
         var canceled = false;
         var resolve;
@@ -95,5 +95,5 @@ exports.useSaga = function (reducer, initialState, saga, options) {
         }, deps);
         return useAsync_1.default(function () { return promise; }, deps);
     };
-    return [reactState, enhancedDispatch, run];
+    return [reactState, enhancedDispatch, useRun];
 };

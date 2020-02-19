@@ -31,10 +31,10 @@ const resetAt = (max: number) => function*() {
 
 export const Counter = (props: {max: number}) => {
 
-  const [count, dispatch, run] = useSaga(reducer, 0, resetAt(props.max))
+  const [count, dispatch, useRun] = useSaga(reducer, 0, resetAt(props.max))
   const [cycle, setCycle] = useState(0)
 
-  run(function* () {
+  useRun(function* () {
     yield takeEvery('RESET_COUNT', function*(a) {
       setCycle( cycle +1 )
     })
@@ -80,13 +80,13 @@ const takePings = (until: number) => function* () {
 
 export default () => {
 
-  const [state, dispatch, run] = useSaga(
+  const [state, dispatch, useRun] = useSaga(
     reducer, 
     initialState, 
     saga
   )
 
-  const counted = run(takePings(4), [])
+  const counted = useRun(takePings(4), [])
 
   return (
     <>
@@ -150,7 +150,7 @@ export default () => {
 
 export const Inner = () => {
 
-  const [state, dispatch, run] = sagaContext.use()
+  const [state, dispatch, useRun] = sagaContext.use()
 
   return (
     <>

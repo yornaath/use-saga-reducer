@@ -19,7 +19,7 @@ const takePings = (until: number) => function* () {
 
 export default (props: {frame: string}) => {
 
-  const [state, dispatch, run] = useSaga(
+  const [state, dispatch, useRun] = useSaga(
     reducer, 
     initialState, 
     saga,
@@ -33,7 +33,7 @@ export default (props: {frame: string}) => {
     }
   )
 
-  const counted = run(takePings(4), [])
+  const counted = useRun(takePings(4), [])
 
   return (
     <>
