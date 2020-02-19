@@ -17,12 +17,20 @@ const takePings = (until: number) => function* () {
   }
 }
 
-export default () => {
+export default (props: {frame: string}) => {
 
   const [state, dispatch, run] = useSaga(
     reducer, 
     initialState, 
-    saga
+    saga,
+    {
+      effectMiddlewares: [
+        (next) => (effect) => {
+          console.log(effect.type)
+          next(effect)
+        }
+      ]
+    }
   )
 
   const counted = run(takePings(4), [])
@@ -35,6 +43,7 @@ export default () => {
       </div>
 
       <div style={{marginBottom: 10}}>
+        {props.frame} {'  '}
         {state.events.map((event, index) => (
           <i key={index}>
             {event} {' '}
@@ -44,16 +53,16 @@ export default () => {
 
       {
         state.error &&
-          <b style={{color: 'orange'}}>{ state.error }</b>
+          <b style={{color: 'orange'}}>{ state.error } {props.frame}</b>
       }
 
       
       <div style={{marginTop: 10}}>
         {
           counted.loading ?
-            <b style={{color: 'orange'}}>counting..</b> :
+        <b style={{color: 'orange'}}>counting.. {props.frame}</b> :
           counted.value ?
-            <b style={{color: 'green'}}>{ counted.value }</b> :
+            <b style={{color: 'green'}}>{ counted.value } {props.frame}</b> :
           "" 
         }
       </div>
