@@ -4,8 +4,8 @@
 Use redux-saga with react reducer hook, with convenience methods for running sagas from components.
 
 ```typescript
-import React, { useEffect } from 'react'
-import { useSaga } from '../../src'
+import React, { useEffect, useState, useRef } from 'react'
+import { useSaga } from '../../../src'
 import { takeEvery, select, delay, put } from 'redux-saga/effects'
 
 const reducer = (count: number, action: any) => {
@@ -24,8 +24,6 @@ const resetAt = (max: number) => function*() {
   yield takeEvery('INCREMENT', function*() {
     const count = (yield select()) as number
     if(count >= max) {
-      console.log('resetting count')
-      yield delay(1400)
       yield put({type: 'RESET_COUNT'})
     }
   })
@@ -34,14 +32,13 @@ const resetAt = (max: number) => function*() {
 export const Counter = (props: {max: number}) => {
 
   const [count, dispatch, run] = useSaga(reducer, 0, resetAt(props.max))
+  const [cycle, setCycle] = useState(0)
 
-  useEffect(() => {
-    run(function* () {
-      yield takeEvery('RESET_COUNT', function*(a) {
-        console.log('count reseted')
-      })
+  run(function* () {
+    yield takeEvery('RESET_COUNT', function*(a) {
+      setCycle( cycle +1 )
     })
-  }, [])
+  }, [cycle])
 
   return (
     <div>
@@ -49,7 +46,8 @@ export const Counter = (props: {max: number}) => {
       <button onClick={() => dispatch({type: 'INCREMENT'})}>+</button>
       <button onClick={() => dispatch({type: 'DECREMENT'})}>-</button>
 
-      <div>{count}</div>
+      <div>counter: {count}</div>
+      <div>cycle: {cycle}</div>
 
     </div>
   )
@@ -62,10 +60,9 @@ export const Counter = (props: {max: number}) => {
 #### SimpleComponent.tsx
 ```typescript
 import React from 'react'
-import { useSaga } from 'use-saga-reducer'
-import { useAsync } from 'react-use'
-import { take, select } from 'redux-saga/effects'
 import { reducer, saga, ping, State, ActionEvent } from './store'
+import { useSaga } from '../../../src'
+import { take, select } from 'redux-saga/effects'
 
 const initialState: State = {
   events: []
@@ -73,7 +70,6 @@ const initialState: State = {
 
 const takePings = (until: number) => function* () {
   while(yield take('ping')) {
-
     const events = (yield select((s) => s.events)) as ActionEvent[]
     const nrOfPings = events.filter(e => e === 'ping').length    
 
@@ -90,9 +86,7 @@ export default () => {
     saga
   )
 
-  const counted = useAsync(async () => {
-    return await run(takePings(3))
-  })
+  const counted = run(takePings(4), [])
 
   return (
     <>
@@ -124,7 +118,6 @@ export default () => {
           "" 
         }
       </div>
-
 
     </>
   )

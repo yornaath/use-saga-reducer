@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSaga } from '../../../src'
 import { takeEvery, select, delay, put } from 'redux-saga/effects'
 
@@ -18,8 +18,6 @@ const resetAt = (max: number) => function*() {
   yield takeEvery('INCREMENT', function*() {
     const count = (yield select()) as number
     if(count >= max) {
-      console.log('resetting count')
-      yield delay(1400)
       yield put({type: 'RESET_COUNT'})
     }
   })
@@ -28,14 +26,14 @@ const resetAt = (max: number) => function*() {
 export const Counter = (props: {max: number}) => {
 
   const [count, dispatch, run] = useSaga(reducer, 0, resetAt(props.max))
+  const [cycle, setCycle] = useState(0)
 
-  useEffect(() => {
-    run(function* () {
-      yield takeEvery('RESET_COUNT', function*(a) {
-        console.log('count reseted')
-      })
+  run(function* () {
+    yield takeEvery('RESET_COUNT', function*() {
+      console.log('cycling')
+      setCycle( cycle +1 )
     })
-  }, [])
+  }, [cycle])
 
   return (
     <div>
@@ -43,7 +41,8 @@ export const Counter = (props: {max: number}) => {
       <button onClick={() => dispatch({type: 'INCREMENT'})}>+</button>
       <button onClick={() => dispatch({type: 'DECREMENT'})}>-</button>
 
-      <div>{count}</div>
+      <div>counter: {count}</div>
+      <div>cycle: {cycle}</div>
 
     </div>
   )

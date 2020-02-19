@@ -1,17 +1,18 @@
 import React from 'react';
 import { EventEmitter } from 'events';
 import { Dispatch } from 'react';
+import { AsyncState } from 'react-use/esm/useAsync';
 import { RunSagaOptions, Saga } from 'redux-saga';
-export declare type RunSaga = <RT>(saga: () => Generator<any, RT>) => Promise<RT>;
-export declare type SagaStore<S, A> = [S, Dispatch<A>, RunSaga];
-export declare type SagaOptions<S, A> = Omit<RunSagaOptions<A, S>, 'channel' | 'dispatch' | 'getState' | 'onError'>;
-export declare const createSagaIO: <S, A>(stateRef: React.MutableRefObject<S>, emitter: EventEmitter, options?: Pick<RunSagaOptions<A, S>, "sagaMonitor" | "context" | "effectMiddlewares"> | undefined) => {
+export declare type RunSaga = <Returns>(saga: () => Generator<any, Returns>, deps?: any[]) => AsyncState<Returns>;
+export declare type SagaStore<State, Action> = [State, Dispatch<Action>, RunSaga];
+export declare type SagaOptions<State, Action> = Omit<RunSagaOptions<Action, State>, 'channel' | 'dispatch' | 'getState' | 'onError'>;
+export declare const createSagaIO: <State, Action>(stateRef: React.MutableRefObject<State>, emitter: EventEmitter, options?: Pick<RunSagaOptions<Action, State>, "sagaMonitor" | "context" | "effectMiddlewares"> | undefined) => {
     sagaMonitor?: import("redux-saga").SagaMonitor | undefined;
     context?: object | undefined;
     effectMiddlewares?: import("redux-saga").EffectMiddleware[] | undefined;
-    channel: import("redux-saga").MulticastChannel<A>;
-    dispatch(action: A): void;
-    getState(): S;
+    channel: import("redux-saga").MulticastChannel<Action>;
+    dispatch(action: Action): void;
+    getState(): State;
 };
 export declare type SagaIO = ReturnType<typeof createSagaIO>;
-export declare const useSaga: <S, A>(reducer: (state: S, action: A) => S, initialState: S, saga: Saga<any[]>, options?: Pick<RunSagaOptions<A, S>, "onError" | "sagaMonitor" | "context" | "effectMiddlewares"> | undefined) => SagaStore<S, A>;
+export declare const useSaga: <State, Action>(reducer: (state: State, action: Action) => State, initialState: State, saga: Saga<any[]>, options?: Pick<RunSagaOptions<Action, State>, "onError" | "sagaMonitor" | "context" | "effectMiddlewares"> | undefined) => SagaStore<State, Action>;

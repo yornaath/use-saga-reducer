@@ -1,5 +1,4 @@
 import React from 'react'
-import { useAsync } from 'react-use'
 import { reducer, saga, ping, State, ActionEvent } from './store'
 import { useSaga } from '../../../src'
 import { take, select } from 'redux-saga/effects'
@@ -10,7 +9,6 @@ const initialState: State = {
 
 const takePings = (until: number) => function* () {
   while(yield take('ping')) {
-
     const events = (yield select((s) => s.events)) as ActionEvent[]
     const nrOfPings = events.filter(e => e === 'ping').length    
 
@@ -27,9 +25,7 @@ export default () => {
     saga
   )
 
-  const counted = useAsync(async () => {
-    return await run(takePings(4))
-  }, [])
+  const counted = run(takePings(4), [])
 
   return (
     <>
@@ -61,7 +57,6 @@ export default () => {
           "" 
         }
       </div>
-
 
     </>
   )

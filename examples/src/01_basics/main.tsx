@@ -14,8 +14,14 @@ ReactDOM.createRoot(rootElement).render(
   <div>
 
     <div style={{marginBottom: 30}}>
+
+      <p>
+        These have individual state
+      </p>
+
       <UseSaga />
       <UseSaga />
+
     </div>
 
     <div style={{marginBottom: 30}}>

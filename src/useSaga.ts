@@ -2,26 +2,26 @@ import React, { MutableRefObject } from 'react'
 import { EventEmitter } from 'events'
 import { unstable_ImmediatePriority, unstable_scheduleCallback } from 'scheduler'
 import { Dispatch, useReducer, useRef, useEffect } from 'react'
+import useAsync, { AsyncState } from 'react-use/esm/useAsync'
 import { runSaga, stdChannel, RunSagaOptions, Saga, channel } from 'redux-saga'
-import {  } from '@redux-saga/types'
 
-export type RunSaga = <RT> (saga: () => Generator<any, RT>) => Promise<RT>
+export type RunSaga = <Returns> (saga: () => Generator<any, Returns>, deps?: any[]) => AsyncState<Returns>
 
-export type SagaStore<S, A> = [S, Dispatch<A>, RunSaga]
+export type SagaStore<State, Action> = [State, Dispatch<Action>, RunSaga]
 
-export type SagaOptions<S, A> = Omit<RunSagaOptions<A, S>, 'channel' | 'dispatch' | 'getState' | 'onError'>
+export type SagaOptions<State, Action> = Omit<RunSagaOptions<Action, State>, 'channel' | 'dispatch' | 'getState' | 'onError'>
 
-export const createSagaIO = <S, A> (
-  stateRef: MutableRefObject<S>, 
+export const createSagaIO = <State, Action> (
+  stateRef: MutableRefObject<State>, 
   emitter: EventEmitter, 
-  options?: SagaOptions<S, A>
+  options?: SagaOptions<State, Action>
 ) => {
-  const channel = stdChannel<A>()
+  const channel = stdChannel<Action>()
   const sagaOptions = options || {}
 
   const io = {
     channel,
-    dispatch(action: A) {
+    dispatch(action: Action) {
       emitter.emit('output', action)
     },
     getState() {
@@ -35,17 +35,17 @@ export const createSagaIO = <S, A> (
 
 export type SagaIO = ReturnType<typeof createSagaIO>
 
-export const useSaga = <S, A> (
-  reducer: (state: S, action: A) => S,
-  initialState: S,
+export const useSaga = <State, Action> (
+  reducer: (state: State, action: Action) => State,
+  initialState: State,
   saga: Saga,
-  options?: Omit<RunSagaOptions<A, S>, 'channel' | 'dispatch' | 'getState'>
-): SagaStore<S, A> => {
+  options?: Omit<RunSagaOptions<Action, State>, 'channel' | 'dispatch' | 'getState'>
+): SagaStore<State, Action> => {
   
   const emitter = useRef(new EventEmitter())
   const [reactState, reactDispatch] = useReducer(reducer, initialState)
 
-  const stateRef = useRef<S>(reactState)
+  const stateRef = useRef<State>(reactState)
   const ioRef = useRef<SagaIO>()
 
   const getIO = () => {
@@ -65,13 +65,13 @@ export const useSaga = <S, A> (
       task.cancel()
     }
 
-    emitter.current.on('input', (action: A) => {
+    emitter.current.on('input', (action: Action) => {
       unstable_scheduleCallback(unstable_ImmediatePriority, () => {
         getIO().channel.put(action)
       })
     })
 
-    emitter.current.on('output', (action: A) => {
+    emitter.current.on('output', (action: Action) => {
       unstable_scheduleCallback(unstable_ImmediatePriority, () => {
         getIO().channel.put(action)
         reactDispatch(action)
@@ -81,7 +81,7 @@ export const useSaga = <S, A> (
     return cancel
   }, [])
 
-  const enhancedDispatch: Dispatch<A> = (action) => {
+  const enhancedDispatch: Dispatch<Action> = (action) => {
     reactDispatch(action)
     unstable_scheduleCallback(unstable_ImmediatePriority, () => {
       emitter.current.emit("input", action)
@@ -89,10 +89,33 @@ export const useSaga = <S, A> (
     return action
   }
 
-  const run: RunSaga = async (saga) => {
-    const task = runSaga(getIO(), saga)
-    const result = await task.toPromise()
-    return result
+  const run: RunSaga = (saga, deps = []) => {
+
+    let canceled = false
+    let resolve: (value?: any) => void
+    let reject: (value?: any) => void
+
+    const promise = new Promise<any>((_resolve, _reject) => {
+      resolve = _resolve
+      reject = _reject
+    })
+
+    useEffect(() => {
+      const task = runSaga(getIO(), saga)
+      task.toPromise()
+        .then((value) => {
+          if(!canceled) resolve(value)
+        })
+        .catch((error) => {
+          if(!canceled) reject(error)
+        })
+      return () => {
+        canceled = true
+        task.cancel()
+      }
+    }, deps)
+
+    return useAsync(() => promise, deps)
   }
 
   return [reactState, enhancedDispatch, run]
