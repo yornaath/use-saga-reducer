@@ -73,10 +73,10 @@
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="_usesaga_.html#runsaga" class="tsd-kind-icon">Run<wbr>Saga</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="_usesaga_.html#sagaio" class="tsd-kind-icon">SagaIO</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_usesaga_.html#sagaoptions" class="tsd-kind-icon">Saga<wbr>Options</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_usesaga_.html#sagastore" class="tsd-kind-icon">Saga<wbr>Store</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="_usesaga_.html#userun" class="tsd-kind-icon">Use<wbr>Run</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -92,12 +92,60 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
-					<a name="runsaga" class="tsd-anchor"></a>
-					<h3>Run<wbr>Saga</h3>
-					<div class="tsd-signature tsd-kind-icon">Run<wbr>Saga<span class="tsd-signature-symbol">:</span> &lt;RT&gt;<span class="tsd-signature-symbol">(</span>saga<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RT</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RT</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="sagaio" class="tsd-anchor"></a>
+					<h3>SagaIO</h3>
+					<div class="tsd-signature tsd-kind-icon">SagaIO<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><a href="_usesaga_.html#createsagaio" class="tsd-signature-type">createSagaIO</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/eda5e33/src/useSaga.ts#L8">useSaga.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/1ae5eb3/src/useSaga.ts#L36">useSaga.ts:36</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+					<a name="sagaoptions" class="tsd-anchor"></a>
+					<h3>Saga<wbr>Options</h3>
+					<div class="tsd-signature tsd-kind-icon">Saga<wbr>Options&lt;State, Action&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RunSagaOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"dispatch"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"getState"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"onError"</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/1ae5eb3/src/useSaga.ts#L12">useSaga.ts:12</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>State</h4>
+						</li>
+						<li>
+							<h4>Action</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+					<a name="sagastore" class="tsd-anchor"></a>
+					<h3>Saga<wbr>Store</h3>
+					<div class="tsd-signature tsd-kind-icon">Saga<wbr>Store&lt;State, Action&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Dispatch</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="_usesaga_.html#userun" class="tsd-signature-type">UseRun</a><span class="tsd-signature-symbol">]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/1ae5eb3/src/useSaga.ts#L10">useSaga.ts:10</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>State</h4>
+						</li>
+						<li>
+							<h4>Action</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
+					<a name="userun" class="tsd-anchor"></a>
+					<h3>Use<wbr>Run</h3>
+					<div class="tsd-signature tsd-kind-icon">Use<wbr>Run<span class="tsd-signature-symbol">:</span> &lt;Returns&gt;<span class="tsd-signature-symbol">(</span>saga<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Returns</span><span class="tsd-signature-symbol">&gt;</span>, deps<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">AsyncState</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Returns</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/1ae5eb3/src/useSaga.ts#L8">useSaga.ts:8</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -105,88 +153,43 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-has-type-parameter">
-									<li class="tsd-signature tsd-kind-icon">&lt;RT&gt;<span class="tsd-signature-symbol">(</span>saga<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RT</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RT</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon">&lt;Returns&gt;<span class="tsd-signature-symbol">(</span>saga<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Returns</span><span class="tsd-signature-symbol">&gt;</span>, deps<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AsyncState</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Returns</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<h4 class="tsd-type-parameters-title">Type parameters</h4>
 										<ul class="tsd-type-parameters">
 											<li>
-												<h4>RT</h4>
+												<h4>Returns</h4>
 											</li>
 										</ul>
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
-												<h5>saga: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RT</span><span class="tsd-signature-symbol">&gt;</span></h5>
+												<h5>saga: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Returns</span><span class="tsd-signature-symbol">&gt;</span></h5>
 												<ul class="tsd-parameters">
 													<li class="tsd-parameter-siganture">
 														<ul class="tsd-signatures tsd-kind-type-literal">
-															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RT</span><span class="tsd-signature-symbol">&gt;</span></li>
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Returns</span><span class="tsd-signature-symbol">&gt;</span></li>
 														</ul>
 														<ul class="tsd-descriptions">
 															<li class="tsd-description">
-																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RT</span><span class="tsd-signature-symbol">&gt;</span></h4>
+																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Generator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Returns</span><span class="tsd-signature-symbol">&gt;</span></h4>
 															</li>
 														</ul>
 													</li>
 												</ul>
 											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> deps: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RT</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AsyncState</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Returns</span><span class="tsd-signature-symbol">&gt;</span></h4>
 									</li>
 								</ul>
 							</li>
 						</ul>
 					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
-					<a name="sagaio" class="tsd-anchor"></a>
-					<h3>SagaIO</h3>
-					<div class="tsd-signature tsd-kind-icon">SagaIO<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><a href="_usesaga_.html#createsagaio" class="tsd-signature-type">createSagaIO</a><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/eda5e33/src/useSaga.ts#L32">useSaga.ts:32</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
-					<a name="sagaoptions" class="tsd-anchor"></a>
-					<h3>Saga<wbr>Options</h3>
-					<div class="tsd-signature tsd-kind-icon">Saga<wbr>Options&lt;S, A&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RunSagaOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"dispatch"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"getState"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"onError"</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/eda5e33/src/useSaga.ts#L12">useSaga.ts:12</a></li>
-						</ul>
-					</aside>
-					<h4 class="tsd-type-parameters-title">Type parameters</h4>
-					<ul class="tsd-type-parameters">
-						<li>
-							<h4>S</h4>
-						</li>
-						<li>
-							<h4>A</h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
-					<a name="sagastore" class="tsd-anchor"></a>
-					<h3>Saga<wbr>Store</h3>
-					<div class="tsd-signature tsd-kind-icon">Saga<wbr>Store&lt;S, A&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Dispatch</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="_usesaga_.html#runsaga" class="tsd-signature-type">RunSaga</a><span class="tsd-signature-symbol">]</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/eda5e33/src/useSaga.ts#L10">useSaga.ts:10</a></li>
-						</ul>
-					</aside>
-					<h4 class="tsd-type-parameters-title">Type parameters</h4>
-					<ul class="tsd-type-parameters">
-						<li>
-							<h4>S</h4>
-						</li>
-						<li>
-							<h4>A</h4>
-						</li>
-					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -195,57 +198,57 @@
 					<a name="createsagaio" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> create<wbr>SagaIO</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>SagaIO&lt;S, A&gt;<span class="tsd-signature-symbol">(</span>dispatch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Dispatch</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span>, stateRef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MutableRefObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><a href="_usesaga_.html#sagaoptions" class="tsd-signature-type">SagaOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MulticastChannel</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>dispatch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>SagaIO&lt;State, Action&gt;<span class="tsd-signature-symbol">(</span>stateRef<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MutableRefObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span>, emitter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventEmitter</span>, options<span class="tsd-signature-symbol">?: </span><a href="_usesaga_.html#sagaoptions" class="tsd-signature-type">SagaOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MulticastChannel</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>dispatch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/eda5e33/src/useSaga.ts#L14">useSaga.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/1ae5eb3/src/useSaga.ts#L14">useSaga.ts:14</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>S</h4>
+									<h4>State</h4>
 								</li>
 								<li>
-									<h4>A</h4>
+									<h4>Action</h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>dispatch: <span class="tsd-signature-type">Dispatch</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>stateRef: <span class="tsd-signature-type">MutableRefObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5>stateRef: <span class="tsd-signature-type">MutableRefObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>emitter: <span class="tsd-signature-type">EventEmitter</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="_usesaga_.html#sagaoptions" class="tsd-signature-type">SagaOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="_usesaga_.html#sagaoptions" class="tsd-signature-type">SagaOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MulticastChannel</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>dispatch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MulticastChannel</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>dispatch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>getState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></h4>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter">
-									<h5>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MulticastChannel</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MulticastChannel</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li class="tsd-parameter">
 									<h5>dispatch<span class="tsd-signature-symbol">: </span>function</h5>
 									<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal">
-										<li class="tsd-signature tsd-kind-icon">dispatch<span class="tsd-signature-symbol">(</span>action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+										<li class="tsd-signature tsd-kind-icon">dispatch<span class="tsd-signature-symbol">(</span>action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/eda5e33/src/useSaga.ts#L20">useSaga.ts:20</a></li>
+													<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/1ae5eb3/src/useSaga.ts#L24">useSaga.ts:24</a></li>
 												</ul>
 											</aside>
 											<h4 class="tsd-parameters-title">Parameters</h4>
 											<ul class="tsd-parameters">
 												<li>
-													<h5>action: <span class="tsd-signature-type">A</span></h5>
+													<h5>action: <span class="tsd-signature-type">Action</span></h5>
 												</li>
 											</ul>
 											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -255,16 +258,16 @@
 								<li class="tsd-parameter">
 									<h5>get<wbr>State<span class="tsd-signature-symbol">: </span>function</h5>
 									<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal">
-										<li class="tsd-signature tsd-kind-icon">get<wbr>State<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span></li>
+										<li class="tsd-signature tsd-kind-icon">get<wbr>State<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
 										<li class="tsd-description">
 											<aside class="tsd-sources">
 												<ul>
-													<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/eda5e33/src/useSaga.ts#L23">useSaga.ts:23</a></li>
+													<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/1ae5eb3/src/useSaga.ts#L27">useSaga.ts:27</a></li>
 												</ul>
 											</aside>
-											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">S</span></h4>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">State</span></h4>
 										</li>
 									</ul>
 								</li>
@@ -276,61 +279,61 @@
 					<a name="usesaga" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> use<wbr>Saga</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">use<wbr>Saga&lt;S, A&gt;<span class="tsd-signature-symbol">(</span>reducer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span>, action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">S</span>, initialState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span>, saga<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Saga</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RunSagaOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"dispatch"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"getState"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_usesaga_.html#sagastore" class="tsd-signature-type">SagaStore</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">use<wbr>Saga&lt;State, Action&gt;<span class="tsd-signature-symbol">(</span>reducer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span>, action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">State</span>, initialState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span>, saga<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Saga</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RunSagaOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"dispatch"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"getState"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_usesaga_.html#sagastore" class="tsd-signature-type">SagaStore</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/eda5e33/src/useSaga.ts#L34">useSaga.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/gorillatron/use-saga-reducer/blob/1ae5eb3/src/useSaga.ts#L38">useSaga.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>S</h4>
+									<h4>State</h4>
 								</li>
 								<li>
-									<h4>A</h4>
+									<h4>Action</h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>reducer: <span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span>, action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">S</span></h5>
+									<h5>reducer: <span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span>, action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">State</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span>, action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span>, action<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">State</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>state: <span class="tsd-signature-type">S</span></h5>
+															<h5>state: <span class="tsd-signature-type">State</span></h5>
 														</li>
 														<li>
-															<h5>action: <span class="tsd-signature-type">A</span></h5>
+															<h5>action: <span class="tsd-signature-type">Action</span></h5>
 														</li>
 													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">S</span></h4>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">State</span></h4>
 												</li>
 											</ul>
 										</li>
 									</ul>
 								</li>
 								<li>
-									<h5>initialState: <span class="tsd-signature-type">S</span></h5>
+									<h5>initialState: <span class="tsd-signature-type">State</span></h5>
 								</li>
 								<li>
 									<h5>saga: <span class="tsd-signature-type">Saga</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RunSagaOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"dispatch"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"getState"</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">Omit</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RunSagaOptions</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"channel"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"dispatch"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"getState"</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_usesaga_.html#sagastore" class="tsd-signature-type">SagaStore</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_usesaga_.html#sagastore" class="tsd-signature-type">SagaStore</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Action</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -356,9 +359,6 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="_usesaga_.html#runsaga" class="tsd-kind-icon">Run<wbr>Saga</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 						<a href="_usesaga_.html#sagaio" class="tsd-kind-icon">SagaIO</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
@@ -366,6 +366,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="_usesaga_.html#sagastore" class="tsd-kind-icon">Saga<wbr>Store</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="_usesaga_.html#userun" class="tsd-kind-icon">Use<wbr>Run</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="_usesaga_.html#createsagaio" class="tsd-kind-icon">create<wbr>SagaIO</a>

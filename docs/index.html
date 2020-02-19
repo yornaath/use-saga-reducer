@@ -68,17 +68,64 @@
 					<h1>use-saga-reducer</h1>
 				</a>
 				<p>Use redux-saga with react reducer hook, with convenience methods for running sagas from components.</p>
-				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
-					<h3>Example</h3>
+				<pre><code class="language-typescript">import React, { useEffect, useState, useRef } from 'react'
+import { useSaga } from '../../../src'
+import { takeEvery, select, delay, put } from 'redux-saga/effects'
+
+const reducer = (count: number, action: any) =&gt; {
+  switch(action.type) {
+    case 'INCREMENT':
+      return count + 1
+    case 'DECREMENT':
+      return count - 1
+    case 'RESET_COUNT':
+      return 0
+  }
+  return count
+}
+
+const resetAt = (max: number) =&gt; function*() {
+  yield takeEvery('INCREMENT', function*() {
+    const count = (yield select()) as number
+    if(count &gt;= max) {
+      yield put({type: 'RESET_COUNT'})
+    }
+  })
+}
+
+export const Counter = (props: {max: number}) =&gt; {
+
+  const [count, dispatch, useRun] = useSaga(reducer, 0, resetAt(props.max))
+  const [cycle, setCycle] = useState(0)
+
+  useRun(function* () {
+    yield takeEvery('RESET_COUNT', function*(a) {
+      setCycle( cycle +1 )
+    })
+  }, [cycle])
+
+  return (
+    &lt;div&gt;
+
+      &lt;button onClick={() =&gt; dispatch({type: 'INCREMENT'})}&gt;+&lt;/button&gt;
+      &lt;button onClick={() =&gt; dispatch({type: 'DECREMENT'})}&gt;-&lt;/button&gt;
+
+      &lt;div&gt;counter: {count}&lt;/div&gt;
+      &lt;div&gt;cycle: {cycle}&lt;/div&gt;
+
+    &lt;/div&gt;
+  )
+}</code></pre>
+				<a href="#example-with-typed-store" id="example-with-typed-store" style="color: inherit; text-decoration: none;">
+					<h3>Example with typed store</h3>
 				</a>
 				<a href="#simplecomponenttsx" id="simplecomponenttsx" style="color: inherit; text-decoration: none;">
 					<h4>SimpleComponent.tsx</h4>
 				</a>
 				<pre><code class="language-typescript">import React from 'react'
-import { useSaga } from 'use-saga-reducer'
-import { useAsync } from 'react-use'
-import { take, select } from 'redux-saga/effects'
 import { reducer, saga, ping, State, ActionEvent } from './store'
+import { useSaga } from '../../../src'
+import { take, select } from 'redux-saga/effects'
 
 const initialState: State = {
   events: []
@@ -86,7 +133,6 @@ const initialState: State = {
 
 const takePings = (until: number) =&gt; function* () {
   while(yield take('ping')) {
-
     const events = (yield select((s) =&gt; s.events)) as ActionEvent[]
     const nrOfPings = events.filter(e =&gt; e === 'ping').length    
 
@@ -97,15 +143,13 @@ const takePings = (until: number) =&gt; function* () {
 
 export default () =&gt; {
 
-  const [state, dispatch, run] = useSaga(
+  const [state, dispatch, useRun] = useSaga(
     reducer, 
     initialState, 
     saga
   )
 
-  const counted = useAsync(async () =&gt; {
-    return await run(takePings(3))
-  })
+  const counted = useRun(takePings(4), [])
 
   return (
     &lt;&gt;
@@ -138,7 +182,6 @@ export default () =&gt; {
         }
       &lt;/div&gt;
 
-
     &lt;/&gt;
   )
 }</code></pre>
@@ -169,7 +212,7 @@ export default () =&gt; {
 
 export const Inner = () =&gt; {
 
-  const [state, dispatch, run] = sagaContext.use()
+  const [state, dispatch, useRun] = sagaContext.use()
 
   return (
     &lt;&gt;
