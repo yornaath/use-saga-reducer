@@ -19,35 +19,19 @@ var scheduler_1 = require("scheduler");
 var react_1 = require("react");
 var useAsync_1 = __importDefault(require("react-use/esm/useAsync"));
 var redux_saga_1 = require("redux-saga");
-exports.createSagaIO = function (stateRef, emitter, options) {
-    var channel = redux_saga_1.stdChannel();
-    var sagaOptions = options || {};
-    var io = __assign({ channel: channel,
-        dispatch: function (action) {
-            emitter.emit('output', action);
-        },
-        getState: function () {
-            return stateRef.current;
-        } }, sagaOptions);
-    return io;
-};
 exports.useSaga = function (reducer, initialState, saga, options) {
     var emitter = react_1.useRef(new events_1.EventEmitter());
     var _a = react_1.useReducer(reducer, initialState), reactState = _a[0], reactDispatch = _a[1];
     var stateRef = react_1.useRef(reactState);
     var ioRef = react_1.useRef();
+    stateRef.current = reactState;
     var getIO = function () {
         if (!ioRef.current)
-            ioRef.current = exports.createSagaIO(stateRef, emitter.current, options);
+            ioRef.current = createSagaIO(stateRef, emitter.current, options);
         return ioRef.current;
     };
-    stateRef.current = reactState;
     react_1.useEffect(function () {
         var task = redux_saga_1.runSaga(getIO(), saga);
-        var cancel = function () {
-            emitter.current.removeAllListeners();
-            task.cancel();
-        };
         emitter.current.on('input', function (action) {
             scheduler_1.unstable_scheduleCallback(scheduler_1.unstable_ImmediatePriority, function () {
                 getIO().channel.put(action);
@@ -59,6 +43,10 @@ exports.useSaga = function (reducer, initialState, saga, options) {
                 reactDispatch(action);
             });
         });
+        var cancel = function () {
+            emitter.current.removeAllListeners();
+            task.cancel();
+        };
         return cancel;
     }, []);
     var enhancedDispatch = function (action) {
@@ -96,4 +84,15 @@ exports.useSaga = function (reducer, initialState, saga, options) {
         return useAsync_1.default(function () { return promise; }, deps);
     };
     return [reactState, enhancedDispatch, useRun];
+};
+var createSagaIO = function (stateRef, emitter, options) {
+    var channel = redux_saga_1.stdChannel();
+    var sagaOptions = options || {};
+    return __assign({ channel: channel,
+        dispatch: function (action) {
+            emitter.emit('output', action);
+        },
+        getState: function () {
+            return stateRef.current;
+        } }, sagaOptions);
 };
