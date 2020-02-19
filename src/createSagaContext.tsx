@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect } from 'react'
+import React, { useContext, useMemo } from 'react'
 import hash from 'hash-sum'
 import { createContext } from 'react'
 import { RunSagaOptions } from 'redux-saga'

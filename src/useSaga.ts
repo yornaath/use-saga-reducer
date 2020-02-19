@@ -3,36 +3,11 @@ import { EventEmitter } from 'events'
 import { unstable_ImmediatePriority, unstable_scheduleCallback } from 'scheduler'
 import { Dispatch, useReducer, useRef, useEffect } from 'react'
 import useAsync, { AsyncState } from 'react-use/esm/useAsync'
-import { runSaga, stdChannel, RunSagaOptions, Saga, channel } from 'redux-saga'
+import { runSaga, stdChannel, RunSagaOptions, Saga } from 'redux-saga'
 
 export type UseRun = <Returns> (saga: () => Generator<any, Returns>, deps?: any[]) => AsyncState<Returns>
-
 export type SagaStore<State, Action> = [State, Dispatch<Action>, UseRun]
-
 export type SagaOptions<State, Action> = Omit<RunSagaOptions<Action, State>, 'channel' | 'dispatch' | 'getState' | 'onError'>
-
-export const createSagaIO = <State, Action> (
-  stateRef: MutableRefObject<State>, 
-  emitter: EventEmitter, 
-  options?: SagaOptions<State, Action>
-) => {
-  const channel = stdChannel<Action>()
-  const sagaOptions = options || {}
-
-  const io = {
-    channel,
-    dispatch(action: Action) {
-      emitter.emit('output', action)
-    },
-    getState() {
-      return stateRef.current
-    },
-    ...sagaOptions
-  }
-
-  return io
-}
-
 export type SagaIO = ReturnType<typeof createSagaIO>
 
 export const useSaga = <State, Action> (
@@ -48,22 +23,17 @@ export const useSaga = <State, Action> (
   const stateRef = useRef<State>(reactState)
   const ioRef = useRef<SagaIO>()
 
+  stateRef.current = reactState
+
   const getIO = () => {
     if(!ioRef.current)
       ioRef.current = createSagaIO(stateRef, emitter.current, options)
     return ioRef.current
   }
   
-  stateRef.current = reactState
-
   useEffect(() => {
     
     const task = runSaga(getIO(), saga)
-
-    const cancel = () => {
-      emitter.current.removeAllListeners()
-      task.cancel()
-    }
 
     emitter.current.on('input', (action: Action) => {
       unstable_scheduleCallback(unstable_ImmediatePriority, () => {
@@ -77,6 +47,11 @@ export const useSaga = <State, Action> (
         reactDispatch(action)
       })
     })
+
+    const cancel = () => {
+      emitter.current.removeAllListeners()
+      task.cancel()
+    }
 
     return cancel
   }, [])
@@ -119,4 +94,25 @@ export const useSaga = <State, Action> (
   }
 
   return [reactState, enhancedDispatch, useRun]
+}
+
+const createSagaIO = <State, Action> (
+  stateRef: MutableRefObject<State>, 
+  emitter: EventEmitter, 
+  options?: SagaOptions<State, Action>
+) => {
+
+  const channel = stdChannel<Action>()
+  const sagaOptions = options || {}
+
+  return {
+    channel,
+    dispatch(action: Action) {
+      emitter.emit('output', action)
+    },
+    getState() {
+      return stateRef.current
+    },
+    ...sagaOptions
+  }
 }
