@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAsync } from 'react-use'
 import { reducer, saga, ping, State, ActionEvent } from './store'
-import { useSaga } from '../../src'
+import { useSaga } from '../../../src'
 import { take, select } from 'redux-saga/effects'
 
 const initialState: State = {

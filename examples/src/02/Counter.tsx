@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useSaga } from '../../src'
+import { useSaga } from '../../../src'
 import { takeEvery, select, delay, put } from 'redux-saga/effects'
 
 const reducer = (count: number, action: any) => {

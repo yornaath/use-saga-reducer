@@ -1,6 +1,6 @@
 import React from 'react'
 import { reducer, saga, ping, State } from './store'
-import { createSagaContext } from '../../src'
+import { createSagaContext } from '../../../src'
 
 const initialState: State = {
   events: []
