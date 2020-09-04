@@ -35,7 +35,7 @@
     "@types/react-dom": "^16.9.5",
     "@types/redux-saga": "^0.10.5",
     "@types/scheduler": "^0.16.1",
-    "react": "0.0.0-experimental-241c4467e",
+    "react": "0.14.0",
     "react-dom": "0.0.0-experimental-241c4467e",
     "react-use": "^13.26.1",
     "typedoc": "^0.16.10",
